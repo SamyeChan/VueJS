@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TODO List | SameyC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <input v-model="inputValue"/>
+            <button @click="handleSubmit">提交</button>
+        </div>
+        <ul>
+            <todo-item 
+                v-for="(item, index) of list" 
+                :key="index"
+                :content="item"
+                :index="index"
+                @delete="handelDelete"
+            >
+            </todo-item>
+        </ul>
+    </div>
+
+    <script>
+        // 组件的拆分：Vue.component（全局组件）
+        // 【每一个vue的组件，又是一个vue的实例】（任一个vue项目，都是由千千万万个实例所构成）
+        // emm...每一个实例都有着自己的组成：props、template、methods等等
+        Vue.component('todo-item', {
+            // 上面将item每一项的数据传递到content中，下面亦需接收数据
+            // "我这个小组件接收从外部传递进来，名叫 content 的属性"
+            props: ['content', 'index'],
+            template: '<li @click="handleClick">{{ content }}</li>',
+            methods: {
+                handleClick: function() {
+                    this.$emit('delete', this.index)
+                }
+            }
+        })
+        // 局部组件（定义）
+        // var TodoItem = {
+        //     template: "<li>item2</li>"
+        // }
+
+        // 如果一个实例没有模板，则会去找到自己的“挂载点”，它会以挂载点下的所有部分作为模板
+        new Vue({
+            el: "#root",
+            // 局部组件（声明）
+            // components: {
+            //     'todo-item': TodoItem
+            // },
+            data: {
+                inputValue: "",
+                list: []
+            },
+            methods: {
+                handleSubmit: function() {
+                    // push()方法：此处自动会往数组list中进行数据添加
+                    this.list.push(this.inputValue)
+                    this.inputValue = ""
+                },
+                // 可接收到子组件传递过来的下标（将list中对应下标删除，即可完成删除操作）
+                handelDelete: function(index) {
+                    this.list.splice(index, 1)
+                }
+            }
+        })
+        // 在vue中，父组件向子组件传值是通过属性的形式进行传递的
+    </script>
+</body>
+</html>

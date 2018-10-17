@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue入门</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <!-- 挂载点、模板与实例之间的关系 -->
+    <!-- 如下这个含id='root'的div标签，就可以叫vue实例的挂载点（vue只会去处理挂载点下面的内容） -->
+    <div id="root">
+        <!-- 数据渲染 -->
+        <h3>{{ msg }}</h3>
+        <h4 v-text="msg1"></h4>
+        <h4 v-html="msg2"></h4>
+        <hr />
+        <!-- 事件 v-on -->
+        <div v-on:click="handleClick">{{ num }}</div>
+        <div @click="handleClick1">{{ msg }}</div>
+        <hr />
+        <!-- 属性绑定 v-bind-->
+        <div :title="bind">hello world</div>
+        <hr />
+        <!-- 双向数据绑定 v-model - 下行值是input行值，input数据改变，下行亦跟着改变 -->
+        <input v-model:value="model"/>
+        <div>{{ model }}</div>
+        <hr />
+        <!-- 计算属性 -->
+        姓氏：<input v-model="firstName"/><br />
+        名字：<input v-model="lastName" /><br />
+        <div>{{ firstName }}{{ lastName }}</div>
+        <div>{{ fullName }}</div>
+        <!-- 侦听器 -->
+        <div>{{ count }}</div>
+        <hr />
+        <!-- v-if、v-show - 点击按钮交替改变元素状态 -->
+        <!-- v-if：直接删除DOM -->
+        <h3 v-if="show">v-if：hello change!</h3>
+        <!-- v-show：利用css中的display:none;对元素隐藏，仍存于DOM（频繁情况下性能更加） -->
+        <h3 v-show="show">v-show：hello change!</h3>
+        <button @click="handleToggle">toggle</button>
+        <!-- v-for：一组数据的循环展示（每次循环key值要不一样，提升每项渲染性能） -->
+        <ul>
+            <li v-for="(item, index) of list" :key="index">{{ item }}</li>
+        </ul>
+    </div>
+    <!-- 在挂载点内部的内容都称为模板的内容 或 也可将模板写在实例的 template 里面 -->
+
+    <!-- 插值表达式：{{ 变量名 }} -->
+
+    <script>
+        new Vue({
+            // vue 接管了id为 root 的元素
+            el: "#root",
+            data: {
+                msg: "Hello World! - {{ msg }}",
+                msg1: "<p>v-text</p>",
+                msg2: "<p>v-html</p>",
+                num: "emm...click!",
+                bind: "属性绑定 v-bind（常用可省略）",
+                model: "双向数据绑定 v-model",
+                firstName: "",
+                lastName: "",
+                count: 0,
+                show: true,
+                list: [1,2,3]
+            },
+            // computed - 一个属性由另一个属性计算而来（只有其依赖的属性发生了变化才会重新计算）
+            computed: {
+                fullName: function() {
+                    return this.firstName + this.lastName
+                }
+            },
+            // watch - 侦听器（监听某一数据的变化，只要发生改动就执行自定方法）
+            watch: {
+                firstName: function() {
+                    this.count ++
+                },
+                lastName: function() {
+                    this.count ++
+                }
+            },
+            methods: {
+                handleClick: function(){
+                    this.num = "BOOM!"
+                },
+                handleClick1: function(){
+                    this.msg = "@"
+                },
+                handleToggle: function() {
+                    this.show = !this.show
+                }
+            }
+        })
+    </script>
+</body>
+</html>
