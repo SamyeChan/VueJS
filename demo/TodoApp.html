@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TodoList | Vue + Element-UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 引入elemwnt-ui的css文件 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element-ui的js文件（需要在vue.js后引入） -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style> 
+        .el-row {
+            margin-bottom: 20px;
+        }
+        .el-col {
+            border-radius: 4px;
+        }
+        .bg-purple {
+            background: #d3dce6;
+        }
+    </style>      
+</head>
+
+<body>
+<div id="app">
+    <el-row :gutter="20">
+        <el-col :span="6">
+            <div class="grid-content bg-purple"></div>
+        </el-col>
+    </el-row>
+</div>
+
+<script>
+    
+</script>
+</body>
+</html>

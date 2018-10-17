@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TodoList | Vue + Element-UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 引入elemwnt-ui的css文件 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element-ui的js文件（需要在vue.js后引入） -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+            #app {
+              font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+              color: #756C83;
+            }
+            .el-header {
+              text-align: center;
+            }
+            .todoinput {
+              margin-bottom: 40px;
+            }
+            .list-row {
+              height: 40px;
+              background-color: #fbfbfb;
+              margin-bottom: 5px;
+            }
+            .check {
+              text-align: center;
+              line-height: 40px;
+            }
+            .red {
+              border-left: #ef5f65 2px solid;
+            }
+            .green {
+              border-left: #B9E1DC 2px solid;
+            }
+            .ipcont {
+              width: 90%;
+              margin-top: 8px;
+              border: 0;
+              line-height: 24px;
+              background-color: transparent;
+              font-size: 16px;
+              color: #756C83;
+            }
+            .options {
+              text-align: center;
+              line-height: 40px;
+            }
+            .el-icon-close {
+              cursor: pointer;
+            }
+            .el-icon-close:hover {
+              color: #ef5f65;
+            }
+            .done {
+              text-decoration: line-through;
+            }
+            .el-tabs__nav-wrap::after {
+                background-color: #fff;
+            }
+          </style>
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header height="20">
+            <h1>TodoList</h1>
+        </el-header>
+        <el-main>
+            <!-- element-ui的input组件 -->
+            <!-- input回车触发add函数，添加.native是因为element-ui对input有封装，不添加无法触发 -->
+            <el-input placeholder="回车添加待办事项" class="todolist" @keyup.enter.native="add" v-model="newtodo.content"></el-input>
+            <p>未完成：{{ todolist.length }} &nbsp;&nbsp;&nbsp; 未完成：{{ donenum }}</p>
+            <el-tabs v-model="listStatus" @tab-click="handleClick">
+                <el-tab-pane label="全部" name="all"></el-tab-pane>
+                <el-tab-pane label="未完成（）" name="do"></el-tab-pane>
+                <el-tab-pane label="已完成（）" name="done"></el-tab-pane>
+            </el-tabs>
+            <el-row v-for="(item, index) in todolist" :key="index" class="list-row">
+                <!-- 多选框 -->
+                <!--通过done的值来绑定class，当done是true时绑定green表示完成，false时绑定red这个class-->
+                <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="check" :class="{red: !todolist[index].done, green: todolist[index].done}">
+                    <el-checkbox size="mini" v-model="item.done"></el-checkbox>
+                </el-col>
+                <!-- todo项 -->
+                <el-col :xs="20" :sm="22" :md="22" :lg="22" :xl="22">
+                    <input type="text" v-model="item.content" class="ipcont" :class="{done: todolist[index].done}">
+                </el-col>
+                <!-- 删除项 -->
+                <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="options" @click="del(index)">
+                    <i class="el-icon-close" @click="del(index)"></i>
+                </el-col>
+            </el-row>
+        </el-main>
+    </el-container> 
+</div>
+
+<script>
+    var doit = new Vue({
+        el: '#app',
+        data: {
+            newtodo: {
+                content: '',
+                done: false
+            },
+            todolist: [
+                {
+                    content: '现在开始吧',
+                    done: false
+                }
+            ],
+            donenum: 0,
+            listStatus: 'all'
+        },
+        methods: {
+            add: function () {
+                if(this.newtodo.content) {
+                    this.todolist.push(this.newtodo)
+                    this.newtodo = {
+                        content: '',
+                        done: false
+                    }
+                }
+            },
+            del: function (index) {
+                this.todolist.splice(index, 1)
+            },
+            handleClick: function(tab, event) {
+                console.log(tab, event)
+            }
+        },
+        //计算属性，filter()把，done为true的返回出来，然后用length得出为true的一共有几个
+        //在HTML部分的 “已完成：{{ donenum }}” 把已完成的显示到页面上
+        cpmputed: {
+            donenum: function () {
+             return this.todolist.filter(function (val) {return val.done}).length
+            }
+        }
+    })
+</script>
+</body>
+</html>
