@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TodoList</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <input type="text" v-model="inputValue" />
+    <button @click="handleBtnClick">ok</button>
+    <ul>
+        <!-- v-bind（:）：向子组件传递值 -->
+        <todo-item :content="item" 
+                   :index="index" 
+                   v-for="(item, index) in list"
+                   @delete="handleItemDelete">
+                   <!-- 父组件要监听，才能保持信息畅通启效 - 收到信息后则触发事件 -->
+        </todo-item>
+    </ul>
+</div>
+
+<script>
+    // 在View层中使用组件时，“驼峰”需要转换成“-”形式
+
+    //【全局组件 - 直接可在模板中使用】
+    // Vue.component("TodoItem", {  
+    //     props: ['content'],  
+    //     template: "<li>{{ content }}</li>"
+    // })
+
+    //【局部组件 - 需要在vue实例中注册局部组件才能使用】
+    var TodoItem = {
+        // 使用props接收父组件传递过来的数据
+        props: ['content', 'index'],
+        // 定义子组件模板（在子组件定义一个事件：告诉父组件要有点操作 - 父组件要监听，才能保持信息畅通启效）
+        template: "<li @click='handleItemClick'>{{ content }}</li>",
+        methods: {
+            handleItemClick: function() {
+                this.$emit("delete", this.index)
+            }
+        }
+    } 
+    var app = new Vue({
+        el: '#app',
+        // 注册子组件
+        components: {
+            TodoItem: TodoItem
+        },
+        data: {
+            list: [],
+            inputValue: ''
+        },
+        methods: {
+            handleBtnClick: function() {
+                this.list.push(this.inputValue)
+                this.inputValue = ''
+            },
+            // 同样是修改list中的数据量 - 只修改点击的那一项的话，就需要只
+            handleItemDelete: function(index) {
+                this.list.splice(index, 1)
+            }
+        }
+    })
+</script>
+</body>
+</html>

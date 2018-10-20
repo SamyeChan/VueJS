@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+<body>
+<!-- {{}}：插值表达式 - 调用data数据 -->
+<div id="app">{{ content }}</div>
+<script>
+    // var dom = document.getElementById('app');
+    // dom.innerHTML = 'Hello World';
+    // setTimeout(function (){
+    //     dom.innerHTML = 'Bye World';
+    // }, 2000)
+
+    // 创建一个vue实例，实例会接收一些配置项
+    // el：实例管理的一个区域（挂载点）- 使我的实例接管名为app的dom标签里的所有内容
+    // data：定义一些数据
+    var app = new Vue({
+        el: '#app',
+        data: {
+            content: 'Hello World!'
+        }
+    })
+    setTimeout(function (){
+        // app是上述vue实例，$data是其下data的别名
+        app.$data.content = 'Bye World~'     
+    }, 2000)
+</script>
+</body>
+</html>

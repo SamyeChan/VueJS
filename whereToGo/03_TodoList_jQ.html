@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TodoList | jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+
+<body>
+
+<!-- 该部分DOM即可看作是 View（视图层） -->
+<div id="app">
+   <input id="input" type="text" />
+   <button id="btn">ok</button>
+    <ul id="list">
+    </ul>
+</div>
+
+<script>
+// 创建一个构造函数
+function Page() {
+
+}
+// Presenter：逻辑层 -0 如下几乎都是在操作DOM
+// $.extend：为jQuery类添加类方法，可以理解为添加静态方法
+// .prototype：允许您向对象添加属性和方法（全局）
+$.extend(Page.prototype, {
+    init: function() {
+        // 要对button绑定一个事件
+        this.bindEvents()
+    },
+    // 定义一个bindEvents来绑定事件
+    bindEvents: function() {
+        var btn = $('#btn');
+        // $.proxy：改变this的指向，将handleBtnClick函数永远绑定在了当前的这个this
+        btn.on('click', $.proxy(this.handleBtnClick, this))
+    },
+    handleBtnClick: function() {
+        var inputElem = $('input');
+        var inputValue = $('input').val();
+        var ulElem = $('#list');
+        ulElem.append('<li>'+ inputValue + '</li>');
+        inputElem.val(''); 
+    }
+})
+
+// 需要创建一个Page是实例才能使用
+var page = new Page();
+page.init();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue实例</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="root" @click="handleClick">{{ msg }}
+    <item></item>
+</div>
+
+<script>
+    Vue.component('item', {
+        template: '<div>chenshengyi</div>'
+    })
+    // vm：一般就指vue实例，vue实例通过 new 创建，其会接管 el 定义的挂载点下的DOM
+    // 在一个实例里面还可以定义props、computed、watch等其他内容
+    // 如下是一个根实例，除此之外，根实例中的子组件也是一个vue实例
+    var vm = new Vue({
+        el: '#root',
+        data: {
+            msg: 'samyechan'
+        },
+        methods: {
+            handleClick: function() {
+                alert("csy")
+            }
+        }
+    })
+
+    // 当一个程序加载时，必定会有一个入口点
+    // 一个Vue项目是由很多vue实例拼装而成
+   
+</script>
+</body>
+</html>

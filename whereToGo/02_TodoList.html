@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TodoList</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- v-model：数据的双向绑定（input发生变化，vue实例中的数据也会发生变化，反之亦然） -->
+    <input type="text" v-model="inputValue" />
+    <!-- v-on（@）：绑定事件（方法写于vue实例的methods中） -->
+    <button @click="handleBtnClick">ok</button>
+    <ul>
+        <!-- 告诉vue要去循环list的数据，将循环每一项放进item里 -->
+        <!-- v-for：帮助循环数据 -->
+        <li v-for="item in list">{{ item }}</li>
+    </ul>
+</div>
+
+<script>
+    // MVVM：<div>为View、<script>为Model
+
+    //创建vue实例
+    var app = new Vue({
+        // 接管范围
+        el: '#app',
+        data: {
+            // <ul>中有多少列<li>是由list中的数据个数决定的（将记录添加至list完成Todo添加功能）
+            list: [],
+            inputValue: ''
+        },
+        methods: {
+            handleBtnClick: function() {
+                // 每次往list中添加input中的数据
+                this.list.push(this.inputValue)
+                // 添加完成置空输入框
+                this.inputValue = ''
+            }
+        }
+    })
+</script>
+</body>
+</html>
