@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>计算属性、方法以及侦听器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 并不希望模板存在着逻辑，即模板要只需显示数据 -->
+    <p>{{ firstName + ' ' + lastName }}</p>
+    <p>{{ fullName }}&nbsp;{{ age }}</p>
+    <p>{{ fullName1() }}</p>
+    <p>{{ fullName2 }}</p>
+</div>
+
+<script>
+   
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            firstName: 'Samye',
+            lastName: 'Chan',
+            fullName2: 'SamyeChan',
+            age: 22
+        },
+        // 计算属性（内置缓存机制）
+        computed: {
+            fullName: function() {
+                // 计算属性会在第一次使用时执行,而后若非其依赖的值改变,则会一直调用上一次的计算结果,即不会每次执行computed
+                console.log("computed 1 time")
+                return this.firstName + ' ' + this.lastName;
+            }
+        },
+        // 使用方法来实现 computed 计算属性的效果(无缓存机制,即只要页面被重新渲染,方法就会被重新执行一次)
+        methods: {
+            fullName1: function() {
+                console.log("computed 1 time")
+                return this.firstName + '...method...' + this.lastName;
+            }
+        },
+        // 相比之下,computed 计算属性性能更佳
+
+        // 侦听器(亦含有缓存机制,即只有当被依赖值改变时,才会重新计算)
+        watch: {
+            // 侦听被依赖的值
+            firstName: function() {
+                console.log("computed 1 time")
+                this.fullName2 = this.firstName + '..watch..' + this.lastName;
+            },
+            lastName: function() {
+                console.log("computed 1 time")
+                this.fullName2 = this.firstName + '..watch..' + this.lastName;
+            }
+        }
+        // watch PK computed - 后者的语法更简洁,并能保持性能,故优选 computed
+    })
+   
+</script>
+</body>
+</html>

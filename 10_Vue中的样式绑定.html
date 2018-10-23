@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue中的样式绑定</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+    <style>
+    .activated {
+        color: orangered;
+    }
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 点击一次文字变橙色,再点变回去,如此反复 -->
+
+    <!-- 01 class的对象绑定 -->
+    <div @click="handleDivClick"
+         :class="{ activated: isActivated }">Hello World!</div>
+    <!-- 希望该 div 有一个名叫 activated 的 class,而拥有该类的]取决于变量 isActivated 是true还是false -->
+    
+    <!-- 02 class的数组绑定 - :class="[activated1, activated2, ...]" -->
+    <div @click="handleDivClick1"
+         :class="[activated1]">Hello World1!</div>
+    <!-- 希望的 class 是 activated 里面的内容 -->
+
+    <!-- 03 style的对象绑定 -->
+    <!-- styleObj 是绑定于class的对象 - 我让这个div有样式，这个样式像 styleObj 里面的那样 -->
+    <div :style="styleObj" @click="handleDivClick2">
+        Hello World2!
+    </div>
+
+    <!-- 04 style的数组绑定 -->
+    <!-- style当然也可以绑定一个数组 - 注意样式中的 - 式属性都应该在此变换成 驼峰 式写法 -->
+    <div :style="[styleObj, {fontSize: '20px'}]" @click="handleDivClick2">
+            Hello World2!
+        </div>
+</div>
+
+<script>
+   
+    var app = new Vue({
+        el: '#app',
+        data: {
+            isActivated: false,
+            // 首先默认存空
+            activated1: "",
+            styleObj: {
+                // 此处color为默认颜色
+                color: "black"
+            }
+        },
+        methods: {
+            handleDivClick: function() {
+                // this.isActivated = true; 
+                this.isActivated = !this.isActivated; 
+            },
+            handleDivClick1: function() {
+                // if(this.activated1 === "activated"){
+                //     this.activated1 = "";
+                // }else{
+                //     this.activated1 = "activated";
+                // }
+
+                // 三元运算（效果与上相同）
+                this.activated1 = this.activated1 === "activated" ? "" : "activated"
+            },
+            handleDivClick2: function() {
+                this.styleObj.color = this.styleObj.color == "black" ? "orange" : "black";
+            }
+        }
+    })
+   
+</script>
+</body>
+</html>

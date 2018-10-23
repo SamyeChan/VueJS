@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue中的列表渲染</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- index 代表列表循环中每一项的索引下标 -->
+    <!-- 还可以写作 item of list -->
+    <!-- 通常为了提升循环显示的性能，会给每一个循环项加上一个 [唯一] 的key值（此处使用的index实际并不佳）-->
+    <div v-for="(item, index) in list" :key="index">
+        {{item}} ------ {{index}}
+    </div>
+    <hr />
+    <div v-for="(item, index) of list1" 
+         :key="item.id">
+        {{item.text}} ------ {{index}}
+    </div>
+    <hr />
+    <!-- template 模板占位符（h5新属性） - 帮助包裹一些元素，但不会被真正地渲染到页面上 -->
+    <template v-for="(item, index) of list1" 
+              :key="item.id">
+        <div>{{item.text}} ------ {{index}}</div>
+        <span>{{item.text}}</span>
+    </template>
+    <hr />
+    <!-- 对象的循环 -->
+    <div v-for="(item, key, index) of userInfo">
+        {{item}} --- {{key}} --- {{index}}
+    </div>
+
+</div>
+
+<script>
+// 望把 list 数组中的值渲染到页面上
+var vm = new Vue({
+    el: '#app',
+    data: {
+        list: [
+            "Turkey",
+            "Paris",
+            "Miami",
+            "Lost",
+            "Tokyo",
+            "Sydney"
+        ],
+        // 一般来说，这个list是后端返回给前端的数据，并不是像demo那样写死了的
+        // 那么每一项数据应该都会有一个id，可能是数据库上的一个随机字段，这个值会是一个唯一标识
+        list1: [{
+            id: "010120201",
+            text: "hello"
+        },{
+            id: "010120202",
+            text: "samye"
+        },
+        {
+            id: "010120203",
+            text: "chan"
+        }],
+        userInfo: {
+            name: 'Samye',
+            age: 22,
+            gender: 'female',
+            salary: 'secret'
+        }
+    }
+
+    // 当尝试修改数组里面的内容的时候，不能直接通过下标的形式来对改变数组（数组改变，但页面并不会随之改变）
+    // 而是应该利用vue提供的几个数组遍历方法来对数组进行操作，才能够实现 数组变化页面也跟着变化 的效果
+    
+    /* 
+        vue提供了7个方法：
+        1- pop（将数组最后一项删除）
+        2- push（往数组里增加一条）
+        3- shift（删除数组第一项）
+        4- unshift（向数组开头添加元素）
+        5- splice（数组的截取）
+        vm.list.splice(1, 1, {id: "123", text: "helena"})
+        6- sort（数组的排序）
+        7- reverse（数组的取反）
+    */
+})
+   
+</script>
+</body>
+</html>

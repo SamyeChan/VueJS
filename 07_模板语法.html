@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>模板语法</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 01 插值表达式 -->
+    {{ name }}
+    <!-- 02 v-text 不响应html标签 -->
+    <div v-text="name1"></div>
+    <!-- 03 v-html 响应html标签 -->
+    <div v-html="name2 "></div>
+    <!-- ps：当看见 v- 时，其后等于的值一定是一个js表达式，而非仅是一个值 -->
+    {{ name + ' | oh~' }}
+    <div v-text="name1 + ' | oh~'"></div>
+    <div v-text="name1 + ' | oh~'"></div>
+    <!-- 99 其他模板语法：v-bind、v-on、v-model... -->
+</div>
+
+<script>
+   
+    var app = new Vue({
+        el: '#app',
+        data: {
+            name: 'samye',
+            name1: 'samyec',
+            name2: '<h1>samyechan</h1>'
+        }
+    })
+   
+</script>
+</body>
+</html>

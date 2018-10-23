@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>计算属性的setter和getter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    {{ fullName }}
+</div>
+
+<script>
+   
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            firstName: 'Samye',
+            lastName: 'Chan',
+        },
+        computed: {
+            // fullName: function() {
+            //     return this.firstName + ' ' + this.lastName;
+            // }
+            fullName: {
+                // getter 获取到值
+                get: function() {
+                    return this.firstName + ' ' + this.lastName;
+                },
+                // setter 对getter获取到的值进行处理
+                // (通过设置一个值来改变与其相关的值,而改变了相关值又会重新地改变其自身计算所得的值,从而也改变了页面显示)
+                set: function(value) {
+                    console.log("computed 1 time");
+                    var arr = value.split(" ");
+                    this.firstName = arr[0];
+                    this.lastName = arr[1];                }
+            }
+            // 仍然是:被依赖的值不改变就不会重新计算,而是重复调用上一次缓存而下的值
+        }
+    })
+   
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue中的条件渲染</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- v- 前缀的指令，其值均为 js表达式 -->
+    <!-- 通过一个v-if指令，结合一个js表达式的返回值，决定一个标签是否在页面中存在（影响DOM） -->
+    <div v-if="showawa">{{ msg }}</div>
+    <!-- v-show与v-if效果一致，但原理不一，v-show影响样式中的display属性，并不会影响DOM（标签一直存在） -->
+    <div v-show="showawa">{{ msg }}</div>
+    <!-- v-show性能更佳 - 不会频繁将标签在DOM上的删除与添加 -->
+
+    <div v-if="showawa">{{ msg }}</div>
+    <!-- v-if 和 v-else 必须紧贴使用 -->
+    <div v-else>Bye World~</div>
+
+    <!-- v-if 、v-else-if 和 v-else 必须紧贴使用 -->
+    <div v-if="showa === 'a'">This is A</div>
+    <div v-else-if="showa === 'b'">This is B</div>
+    <div v-else>This is others~</div>
+
+    <!-- 当show值变化时，input内已输入值并不会被清空 - Vue在重新渲染页面时会尽可能地复用页面中已存在的DOM -->
+    <!-- 解决 - 为每个input添加key值 -->
+    <!-- 原因：当为某个元素添加了key值以后，就相当于告诉了vue它是一个唯一元素，那么vue就不会去尝试复用这块的内容 -->
+    <div v-if="show">
+        用户名：<input key="username" />
+    </div>
+    <div v-else>
+        QQ：<input key="password" />
+    </div>
+
+</div>
+
+<script>
+   
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            showawa: false,
+            showa: 'a',
+            show: true,
+            msg: 'Hello World!'
+        }
+    })
+   
+</script>
+</body>
+</html>
