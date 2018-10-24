@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>父子组件传值</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 父组件通过属性的方式向子组件传递数据 -->
+    <!-- count="0" 中 0 为一个字符串；:count="0" 中 0 为一个数值（因为vue指令的值均为js表达式） -->
+    <counter count="0"
+            @change="handleClick1"></counter>
+    <counter :count="0"
+            @change="handleClick1"></counter>
+    <div>{{ total }}</div>
+</div>
+
+<script>
+    // 定义一个局部组件
+    var counter = {
+        // 子组件要接收父组件传递的数据
+        props: ['count'],
+        data: function() {
+            return {
+                number: this.count
+            }
+        },
+        template: '<div @click="handleClick">{{ number }}</div>',
+        methods: {
+            // 不要直接修改父组件数据
+            /* 单向流概念：父组件可以向子组件传递数据，且可随便修改数据；
+                     但子组件只能用这个数据而不能改。
+                    （原因：若父组件传递的是对象，则子组件改变其引用可能会引发很多其它引用关系）
+                     (解决：在 data 中定义自己的变量来接收父组件传递过来的数据，copy后操作属于自己的数据即可)
+            */
+            handleClick: function() {
+                this.number = this.number + 2
+                // 告诉父组件，我新增了2（step：步长）
+                this.$emit('change', 2)
+            }
+        }
+    } 
+    var vm = new Vue({
+        el: '#app',
+        // 在vue实例中注册局部组件
+        data: {
+            total: 0
+        },
+        components: {
+            counter: counter
+        },
+        methods: {
+            handleClick1: function(step) {
+                this.total += step
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

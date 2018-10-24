@@ -3,19 +3,104 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>～</title>
+    <title>组件使用的细节点</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="vue.js"></script>
 </head>
 
 <body>
 
-<div id="app"></div>
+<div id="app">
+    <!-- 01 Vue的is属性 -->
+    <table>
+        <tbody>
+            <!-- 希望将以下的每一行设置为一个子组件 -->
+            <tr><td>1</td></tr>
+            <tr><td>2</td></tr>
+            <tr><td>3</td></tr>
+            <!-- 子组件在 View 层使用 -->
+            <row></row>
+            <!-- vue提供的 is 属性解决 -->
+            <tr is="row"></tr>
+        </tbody>
+    </table>
+    <hr />
+    <!-- 02 子组件中的 data 必须是一个函数 -->
+    <table>
+        <tbody>
+            <tr is="row"></tr>
+        </tbody>
+    </table>
+    <hr />
+    <!-- 03 Vue中的ref（引用）：在Vue中通过ref获取DOM -->
+    <!-- Vue不建议在代码中直接操作DOM，但在处理一些极其复杂的动画效果时是不得不去操作DOM的 -->
+    <div ref="hello" 
+        @click="handleClick">
+    Hello World!
+    </div>
+    <hr />
+    <!-- 04 在子组件中使用ref -->
+    <!-- 父组件默默监听着子组件中的change事件（听到儿砸的呐喊就触发事件 handleChange） -->
+    <counter ref="one"
+            @change="handleChange"></counter>
+    <counter ref="two"
+            @change="handleChange"></counter>
+    <div>{{ total }}</div>
+</div>
 
 <script>
-   
+   // 定义全局变量（先取名为 row，后设置模板 template）
+   Vue.component('row', {
+       /* 错误点：以下 {{ msg }} 失效
+          原因：只有根组件中的 data 允许是一个对象，其余子组件中的 data 均必须是一个 函数，且该函数应该返回一个 对象
+          目的：让每一个子组件都拥有其独立的数据，而非一致数据，则不会出现多个子组件间数据相互影响的状况
+       data: {
+           msg: 'Hello!'
+       },
+       */
+       data: function() {
+           return {
+            msg: 'Hello!'
+           }
+       },
+       template: '<tr><td>{{ msg }}</td></tr>'
+   })
+
+    // 在子组件中使用ref（获取的是子组件的引用）
+    Vue.component('counter', {
+        template: '<div @click="handleClick1">{{ number }}</div>',
+        data: function() {
+            return {
+                number: 0
+            }
+        },
+        methods: {
+            handleClick1: function() {
+                this.number ++
+                // 涉及子组件向父组件传值内容
+                // 当子组件数据改变，则通过 $emit 告诉外边触发事件 change（宣告：我变了！）
+                this.$emit('change')
+            }
+        }
+    })
+
     var vm = new Vue({
-        el: '#app'
+        // 因为挂载点在 app 处，故子组件 row 将渲染为 app 的子代元素，而不会被渲染在 <tbody> 中 - BUG
+        el: '#app',
+        data: {
+            total: 0
+        },
+        methods: {
+            handleClick: function() {
+               // 这个页面所有引用中一个名为 hello 的引用（其对应的就时 ref 所在的节点）
+               console.log(this.$refs.hello)
+               // 获取其中的内容
+               console.log(this.$refs.hello.innerHTML)
+            },
+            handleChange: function() {
+                this.total = this.$refs.one.number + this.$refs.two.number
+            }
+        }
     })
    
 </script>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vue中的作用域插槽</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <child>
+        <!-- 作用域插槽必然放置于一个 template 标签之中 -->
+        <!-- slot-scope="xxx" 插槽需要声明数据放在哪儿 -->
+        <template slot-scope="props">
+            <h1>{{ props.item }}</h1>
+        </template>
+    </child>
+</div>
+
+<script>
+   
+   Vue.component('child', {
+       data: function() {
+           return {
+               list: [1, 2, 3, 4]
+           }
+       },
+       template: `<div>
+                    <ul>
+                        <slot v-for="item in list"
+                              :item=item>
+                            {{ item }}
+                        </slot>
+                    </ul>
+                 </div>`
+                 // 传递数据 - 此处为item
+   })
+    var vm = new Vue({
+        el: '#app'
+    })
+   
+</script>
+</body>
+</html>

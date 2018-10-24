@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>非父子组件间的传值（Bus/总线/发布订阅模式/观察者模式）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 预想效果：点击前者，后者变为前者content，反之亦然 -->
+    <child content="Samye"></child>
+    <child content="Chan"></child>
+</div>
+
+<script>
+   // 在Vue的类上挂一个bus属性，则每一个通过Vue创建的实例都会含有bus属性
+   Vue.prototype.bus = new Vue()
+
+   Vue.component('child', {
+       data: function() {
+           return {
+               // 子组件不能直接操作父组件数据，需要一个克隆操作
+               selfContent: this.content
+           }
+       },
+       props: {
+           // 组件参数校验
+           content: String
+        },
+       template: '<div @click="handleClick">{{ selfContent }}</div>',
+       methods: {
+            handleClick: function() {
+                // this.bus指挂载在实例上的bus，而这个 bus 又是vue的一个实例，
+                // 故可通过 $emit 来触发一个事件，一个携带 this.content 数据的事件
+                this.bus.$emit('change', this.selfContent)
+            }
+        },
+        // 使用名为 mounted 的生命周期钩子
+        mounted: function() {
+            var this_ = this
+            // $on 可监听到vue实例上所触发的事件
+            this.bus.$on('change', function(msg) {
+                this_.selfContent = msg
+            })
+        }
+   })
+
+    var vm = new Vue({
+        el: '#app'
+    })
+   
+</script>
+</body>
+</html>

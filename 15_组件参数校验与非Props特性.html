@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>组件参数校验与非Props特性</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <!-- <child content="hey"></child>
+    <child content="hello world"></child>
+    <child :content="1"></child> -->
+    <child></child>
+</div>
+
+<script>
+    Vue.component('child', {
+        // 组件的参数校验（子组件对父组件通过属性传递过来的数据进行某些要求）
+        // 解决：props不接收数组，而接收一个对象
+        props: {
+            // content 必须是个字符串（报错的话是在console中）
+            // content: String,
+            // content1 要么是个字符串，要么是个数值
+            // content: [String, Number],
+            content: {
+                type: String
+            }
+        },
+        template: '<div>{{ content }}</div>'
+    })
+   
+    var vm = new Vue({
+        el: '#app'
+    })
+
+   
+</script>
+</body>
+</html>
